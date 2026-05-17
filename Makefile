@@ -23,8 +23,10 @@ data/sweep_results/.fetched:
 	@./data/fetch.sh
 	@touch $@
 
-# `make <experiment-stem>` runs experiments/<stem>.jl
-%: experiments/%.jl | data
+# Static pattern rule explicitly tied to each experiment name. Necessary
+# because GNU Make does not apply implicit pattern rules to PHONY targets.
+# Enables both `make all` and `make 01_fig1_1_two_family_Lt` to work.
+$(EXP_NAMES): %: experiments/%.jl | data
 	$(JULIA) $<
 
 clean:
